@@ -1,0 +1,9 @@
+1. verificar el jdk (netbeans>tools>1)options, 2)platforms, 3)variablesDeEntorno)
+2. descargar el 12.0 verified https://plugins.netbeans.apache.org/catalogue/?id=4
+3. netbeans>tools>plugins>downloaded>add plugin
+4. crear un proyecto: maven>spring boot initializr
+5. cambiar los datos del proyecto (artifact asigna el nombre del proyecto)
+6. agregar los plugin: spring boot devtools & spring boot web, next....
+7. ir a other sources>default package>application properties>(asignar el puerto) server.port=8095
+8. ir a source packages> crear dos paquetes> 1)(paquetes creados).controlador: crear clase controlador, 2) (paquetes creados).dominio: crear clase persona o de lo que se trabaje
+9. ir a other sources>static: crear el functions.js & index.html
