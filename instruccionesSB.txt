@@ -7,3 +7,4 @@
 7. ir a other sources>default package>application properties>(asignar el puerto) server.port=8095
 8. ir a source packages> crear dos paquetes> 1)(paquetes creados).controlador: crear clase controlador, 2) (paquetes creados).dominio: crear clase persona o de lo que se trabaje
 9. ir a other sources>static: crear el functions.js & index.html
+extra: generador de proyectos: https://start.spring.io/
