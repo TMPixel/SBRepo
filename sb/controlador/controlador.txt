@@ -1,0 +1,53 @@
+package uta.edu.expo5.springboot.Servicios.controlador;
+
+import java.util.Arrays;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+import uta.edu.expo5.springboot.Servicios.paquetedominio.Persona;
+
+@RestController
+public class Controlador {
+    private RestTemplate restTemplate; //manejo solicitudes
+    private String urlServicio = "http://localhost:8080/sistema/ControllerSpringboot/rest.php";
+    
+    @Autowired //instanciacion automatica del controlador
+    public Controlador(){
+        this.restTemplate = new RestTemplate();
+    }
+    
+    @GetMapping("/persona") //agrega a la url /persona para el acceso al met get
+    public List<Persona> selectPersons(){
+       Persona[] serverAnswer = this.restTemplate.getForObject(this.urlServicio, Persona[].class);
+//       for(int i = 0; i < serverAnswer.length; i++){
+//           serverAnswer[i].setNombre(serverAnswer[i].getNombre() + "Modificado");
+//       }
+       return Arrays.asList(serverAnswer);
+    }
+    
+    @PostMapping("/persona")
+    public void insertPersona(@RequestBody Persona persona){
+        this.restTemplate.postForObject(this.urlServicio,persona,Persona.class);
+    }
+    
+    /*------------------------------------------------------------------------*/
+    @PutMapping("/persona")
+    public void updatePersona(@RequestBody Persona persona){
+        this.restTemplate.put(this.urlServicio, persona);
+    }
+    /*------------------------------------------------------------------------*/
+    
+    @DeleteMapping("/persona/{cedula}")
+    public void deletePersona(@PathVariable String cedula){
+        this.restTemplate.delete(this.urlServicio + "?cedula=" + cedula);
+    }
+    
+    
+}
