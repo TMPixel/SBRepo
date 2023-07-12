@@ -1,0 +1,87 @@
+select.php
+<?php
+class CrudS{
+  public static function obtenerPersonas(){
+      include_once 'conexion.php';
+      $objeto= new Conexion();
+      $conexion=$objeto->Conectar();
+      $nombre=$_GET['nombre'];
+      $consulta=" SELECT * FROM persona WHERE Nombre like ?";
+      $resultado=$conexion->prepare($consulta);
+      $resultado->execute(array($nombre."%"));
+      $data = $resultado->fetchAll(PDO::FETCH_ASSOC);
+      echo json_encode($data);
+    }
+}
+?>
+
+controlador:
+@RestController
+@RequestMapping("/url")
+public class Controlador {
+
+    private RestTemplate resttemplate;
+    private String url = "http://empresa.com/rest.php?nombre=";
+
+    @Autowired
+    public Controlador() {
+        this.resttemplate = new RestTemplate();
+    }
+
+    @GetMapping("/buscar")
+    public List<Persona> selectPersona() {
+        Persona[] respuesta = this.resttemplate.getForObject(this.url, Persona[].class);
+        return Arrays.asList(respuesta);
+    }
+    @GetMapping("/buscar/{nombre}")
+    public List<Persona> getbuscar(@PathVariable String nombre) {
+        Persona[] respuesta = this.resttemplate.getForObject(this.url+nombre, Persona[].class);
+        return Arrays.asList(respuesta);
+    }
+}
+
+functions:
+$(document).ready(function () {
+    loadUsers();
+    $("#buscar").submit(function () {
+        cedula = $("#ingreso").val();
+        $.ajax({
+            url: "http://localhost:8088/url/buscar/" + cedula,
+            type: "GET",
+            dataType: 'json',
+            success: function (data) {
+                var tabla = "";
+                for (let i = 0; i < data.length; i++) {
+                    tabla += "<tr>" +
+                            "<td>" + data[i].Cedula + "</td>" +
+                            "<td>" + data[i].Nombre + "</td>" +
+                            "<td>" + data[i].Apellido + "</td>" +
+                            "<td>" + data[i].edad + "</td>" +
+                            "</tr>";
+                }
+                $("#tbUsers tbody").html(tabla);
+            }
+        });
+        return false;
+    });
+});
+
+function loadUsers() {
+    $.ajax({
+        url: "http://localhost:8088/url/buscar",
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            var htmlTable = "";
+            for (let i = 0; i < data.length; i++) {
+                htmlTable += "<tr>" +
+                        "<td>" + data[i].Cedula + "</td>" +
+                        "<td>" + data[i].Nombre + "</td>" +
+                        "<td>" + data[i].Apellido + "</td>" +
+                        "<td>" + data[i].edad + "</td>" +
+                        "</tr>";
+            }
+            document.querySelector("#tbUsers tbody").outerHTML = htmlTable;
+        }
+    });
+}
