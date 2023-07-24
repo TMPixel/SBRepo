@@ -1,0 +1,17 @@
+@RestController
+public class Controlador {
+    RestTemplate plantilla;
+    String url = "http://localhost:8080/sistema/pruebasoafinal/rest.php";
+    
+    @Autowired
+    public Controlador(){
+        this.plantilla = new RestTemplate();
+    }
+    
+    @GetMapping("/estudiante/{nom_cur}")
+    public List<Estudiantes> selectPersons(@PathVariable String nom_cur){
+       Estudiantes[] serverAnswer = this.plantilla.getForObject(this.url+"?nom_cur="+nom_cur, Estudiantes[].class);
+       return Arrays.asList(serverAnswer);
+    }
+    
+}
